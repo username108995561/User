@@ -10,5 +10,9 @@
   {
     "username": "permanent",
     "password": "key"
+  },
+  {
+    "username": "1",
+    "password": "1"
   }
 ]
