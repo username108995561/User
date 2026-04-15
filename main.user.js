@@ -76,9 +76,7 @@
     // ========================
     const sequence = [
         'C0NT!NU𝗔R', 'Continuar', 'Fechar', '𝗔V4NC@R', '𝗔V4NC@R ET𝗔P@',
-        'CL!QU3 𝗔QUІ!', 'PR0SS3GU!R', 'CL!QU3 P𝗔R@ C0NT!NU𝗔R', 'F!N𝗔L!ZAR',
-        'Continue', 'Next', 'Skip', 'Verify', 'Confirm', 'Get Link', 'Download',
-        'Access', 'Proceed', 'Unlock', 'Continue to Article', 'Click Here'
+        'CL!QU3 𝗔QUІ!', 'PR0SS3GU!R', 'CL!QU3 P𝗔R@ C0NT!NU𝗔R', 'F!N𝗔L!ZAR'
     ];
 
     const clickInterval = setInterval(() => {
