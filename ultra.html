@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultra · Remote Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Inter', monospace;
+            min-height: 100vh;
+            background: #0a0a0f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 200, 0.03) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(0, 150, 255, 0.04) 0%, transparent 50%);
+            color: #b0f0e6;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 480px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .card {
+            background: rgba(8, 12, 20, 0.88);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 40px 30px 34px;
+            border: 1px solid rgba(0, 255, 200, 0.06);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(0, 255, 200, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 140deg at 50% 50%, transparent, rgba(0, 255, 200, 0.02), transparent, rgba(0, 150, 255, 0.01), transparent);
+            animation: rotateGlow 40s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotateGlow {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header .icon {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 2px;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 200, 0.1));
+        }
+
+        .header h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #00ffc8, #00a6ff, #7b2ffc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .header .sub {
+            font-weight: 400;
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(0, 255, 200, 0.15);
+            margin-top: 4px;
+        }
+
+        .header .sub::before {
+            content: '> ';
+            color: rgba(0, 255, 200, 0.2);
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.55rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(0, 255, 200, 0.15);
+            margin-bottom: 4px;
+        }
+
+        .field label::before {
+            content: '# ';
+            color: rgba(0, 255, 200, 0.1);
+        }
+
+        .field input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 255, 200, 0.02);
+            border: 1px solid rgba(0, 255, 200, 0.05);
+            border-radius: 14px;
+            color: #b0f0e6;
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: 0.25s;
+            outline: none;
+        }
+
+        .field input:focus {
+            border-color: rgba(0, 255, 200, 0.1);
+            background: rgba(0, 255, 200, 0.03);
+            box-shadow: 0 0 30px rgba(0, 255, 200, 0.02);
+        }
+
+        .field input::placeholder {
+            color: rgba(255, 255, 255, 0.04);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(0, 255, 200, 0.06), rgba(0, 150, 255, 0.06));
+            border: 1px solid rgba(0, 255, 200, 0.06);
+            border-radius: 16px;
+            color: #b0f0e6;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 255, 200, 0.1);
+            box-shadow: 0 12px 40px rgba(0, 255, 200, 0.03);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn.loading .spinner {
+            display: inline-block;
+        }
+        .btn.loading .text {
+            display: none;
+        }
+
+        .spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(0, 255, 200, 0.1);
+            border-top: 2px solid #00ffc8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .msg {
+            margin-top: 14px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            text-align: center;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 255, 200, 0.02);
+            border: 1px solid transparent;
+            transition: 0.25s;
+        }
+
+        .msg.error {
+            background: rgba(255, 70, 70, 0.04);
+            border-color: rgba(255, 70, 70, 0.06);
+            color: #ff6a6a;
+        }
+
+        .msg.success {
+            background: rgba(0, 255, 200, 0.04);
+            border-color: rgba(0, 255, 200, 0.06);
+            color: #00ffc8;
+        }
+
+        .msg.info {
+            background: rgba(0, 150, 255, 0.04);
+            border-color: rgba(0, 150, 255, 0.04);
+            color: #6ac8ff;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+            font-size: 0.55rem;
+            color: rgba(0, 255, 200, 0.04);
+        }
+
+        .footer span {
+            color: rgba(0, 255, 200, 0.06);
+        }
+
+        .status-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin: 12px 0 4px;
+        }
+
+        .status-dots .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(0, 255, 200, 0.03);
+            transition: 0.3s;
+        }
+
+        .status-dots .dot.active {
+            background: #00ffc8;
+            animation: pulseDot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+
+        /* Dashboard */
+        .dash-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .module-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(0, 255, 200, 0.01);
+            border: 1px solid rgba(0, 255, 200, 0.02);
+            border-radius: 14px;
+            transition: 0.25s;
+        }
+
+        .module-item:hover {
+            border-color: rgba(0, 255, 200, 0.04);
+        }
+
+        .module-item .info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .module-item .info .emoji {
+            font-size: 1.2rem;
+        }
+
+        .module-item .info .name {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .module-item .info .desc {
+            font-size: 0.55rem;
+            color: rgba(0, 255, 200, 0.1);
+        }
+
+        .toggle {
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.55rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(0, 255, 200, 0.04);
+            background: rgba(0, 255, 200, 0.02);
+            color: rgba(0, 255, 200, 0.15);
+            cursor: pointer;
+            transition: 0.25s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .toggle:hover {
+            background: rgba(0, 255, 200, 0.04);
+            border-color: rgba(0, 255, 200, 0.06);
+        }
+
+        .toggle.active {
+            background: rgba(0, 255, 200, 0.06);
+            border-color: rgba(0, 255, 200, 0.08);
+            color: #00ffc8;
+        }
+
+        .launch-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 4px;
+            background: linear-gradient(135deg, rgba(0, 200, 255, 0.03), rgba(0, 255, 200, 0.03));
+            border: 1px solid rgba(0, 255, 200, 0.04);
+            border-radius: 14px;
+            color: #b0f0e6;
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .launch-btn:hover {
+            background: rgba(0, 255, 200, 0.04);
+            border-color: rgba(0, 255, 200, 0.06);
+        }
+
+        .console-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 14px;
+            padding: 10px 14px;
+            max-height: 100px;
+            overflow-y: auto;
+            font-size: 0.6rem;
+            border: 1px solid rgba(0, 255, 200, 0.02);
+            margin-top: 6px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .console-box::-webkit-scrollbar {
+            width: 2px;
+        }
+        .console-box::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 200, 0.03);
+            border-radius: 10px;
+        }
+
+        .log-line {
+            padding: 2px 0;
+            color: rgba(0, 255, 200, 0.12);
+        }
+
+        .log-line .highlight {
+            color: #00ffc8;
+        }
+
+        .log-line .timestamp {
+            color: rgba(0, 255, 200, 0.04);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.5rem;
+            background: rgba(0, 255, 200, 0.02);
+            border: 1px solid rgba(0, 255, 200, 0.03);
+            color: rgba(0, 255, 200, 0.1);
+        }
+
+        .badge.active {
+            background: rgba(0, 255, 200, 0.04);
+            border-color: rgba(0, 255, 200, 0.06);
+            color: #00ffc8;
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .row .btn-sm {
+            flex: 1;
+            padding: 8px;
+            border-radius: 12px;
+            font-size: 0.55rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(0, 255, 200, 0.03);
+            background: rgba(0, 255, 200, 0.01);
+            color: rgba(0, 255, 200, 0.1);
+            cursor: pointer;
+            transition: 0.25s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .row .btn-sm:hover {
+            background: rgba(0, 255, 200, 0.03);
+            border-color: rgba(0, 255, 200, 0.05);
+        }
+
+        @media (max-width: 400px) {
+            .card {
+                padding: 28px 18px 24px;
+                border-radius: 20px;
+            }
+            .header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // ============ CREDENTIALS ============
+        const CRED = { username: 'dilx', password: '1' };
+
+        // ============ SHELL SIMULATOR ============
+        class Shell {
+            constructor() {
+                this.state = {
+                    initialized: false,
+                    aimbot: false,
+                    esp: false,
+                    recoil: false,
+                    drag: false,
+                    status: 'idle'
+                };
+                this.logs = [];
+            }
+
+            async init() {
+                this.log('Initializing Engine...', 'info');
+                await this.sleep(500);
+                this.log('Loading Assets...', 'info');
+                await this.sleep(800);
+                this.log('Loading Modules...', 'info');
+                await this.sleep(800);
+                this.log('Connecting Kernel...', 'info');
+                await this.sleep(800);
+                this.state.initialized = true;
+                this.state.status = 'ready';
+                this.log('✅ Engine Ready', 'success');
+                return true;
+            }
+
+            async toggle(module) {
+                if (!this.state.initialized) {
+                    this.log('⚠️ Engine not initialized!', 'warning');
+                    return false;
+                }
+                this.state[module] = !this.state[module];
+                const status = this.state[module] ? 'activated' : 'deactivated';
+                const names = {
+                    aimbot: 'Aimbot AI',
+                    esp: 'All ESP',
+                    recoil: 'No Recoil',
+                    drag: 'Aimbot Drag'
+                };
+                this.log(`${names[module]} ${status}`, this.state[module] ? 'success' : 'warning');
+                await this.sleep(300);
+                return this.state[module];
+            }
+
+            async launch() {
+                if (!this.state.initialized) {
+                    this.log('⚠️ Initialize engine first!', 'warning');
+                    return false;
+                }
+                this.log('Applying Configuration...', 'info');
+                for (let i = 10; i <= 100; i += 10) {
+                    await this.sleep(200);
+                }
+                this.log('✅ STATUS: READY', 'success');
+                this.log('🚀 Launching Free Fire...', 'info');
+                await this.sleep(800);
+                this.log('✅ Game launched successfully!', 'success');
+                this.state.status = 'running';
+                return true;
+            }
+
+            async reset() {
+                this.state.aimbot = false;
+                this.state.esp = false;
+                this.state.recoil = false;
+                this.state.drag = false;
+                this.state.status = 'idle';
+                this.log('↺ All modules reset', 'warning');
+                return true;
+            }
+
+            log(message, type = 'info') {
+                const entry = {
+                    message,
+                    type,
+                    timestamp: new Date().toLocaleTimeString()
+                };
+                this.logs.push(entry);
+                if (this.logs.length > 30) this.logs.shift();
+            }
+
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // ============ RENDER ============
+        function renderLogin() {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <div class="wrapper">
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">
+                                <span class="icon">⬡</span>
+                                <h1>Ultra</h1>
+                                <div class="sub">remote control v3.0</div>
+                                <div class="status-dots">
+                                    <span class="dot active"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label>username</label>
+                                <input type="text" id="user" placeholder="dilx" value="dilx" />
+                            </div>
+                            <div class="field">
+                                <label>access key</label>
+                                <input type="password" id="pass" placeholder="••••••" value="1" />
+                            </div>
+
+                            <button class="btn" id="loginBtn">
+                                <span class="text">⟡ connect</span>
+                                <span class="spinner"></span>
+                            </button>
+
+                            <div class="msg" id="msg">⏎ waiting for handshake</div>
+
+                            <div class="footer">
+                                <span>@DilxVXII</span>
+                                <span>•</span>
+                                <span>encrypted</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const user = document.getElementById('user');
+            const pass = document.getElementById('pass');
+            const btn = document.getElementById('loginBtn');
+            const msg = document.getElementById('msg');
+
+            function setMsg(text, type = 'info') {
+                msg.textContent = text;
+                msg.className = 'msg ' + type;
+            }
+
+            function login() {
+                const u = user.value.trim();
+                const p = pass.value.trim();
+                if (!u || !p) {
+                    setMsg('⛔ incomplete credentials', 'error');
+                    return;
+                }
+
+                btn.classList.add('loading');
+                btn.disabled = true;
+                setMsg('⟡ establishing secure channel...', 'info');
+
+                setTimeout(() => {
+                    if (u === CRED.username && p === CRED.password) {
+                        setMsg('✅ handshake successful', 'success');
+                        setTimeout(() => renderDashboard(u), 600);
+                    } else {
+                        btn.classList.remove('loading');
+                        btn.disabled = false;
+                        setMsg('⛔ access denied', 'error');
+                    }
+                }, 1200);
+            }
+
+            btn.addEventListener('click', login);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') login();
+            });
+        }
+
+        function renderDashboard(username) {
+            const shell = new Shell();
+            const app = document.getElementById('app');
+
+            app.innerHTML = `
+                <div class="wrapper">
+                    <div class="card">
+                        <div class="content">
+                            <div class="header" style="margin-bottom:16px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                    <span style="font-weight:700;font-size:1.2rem;background:linear-gradient(135deg,#00ffc8,#00a6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">⬡ Ultra</span>
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <span style="font-size:0.55rem;color:rgba(0,255,200,0.15);">${username}</span>
+                                        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#00ffc8;animation:pulseDot 1.5s ease-in-out infinite;"></span>
+                                    </div>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+                                    <span style="font-size:0.5rem;color:rgba(0,255,200,0.08);">SM-A075F · Android 15</span>
+                                    <span class="badge" id="statusBadge">idle</span>
+                                </div>
+                            </div>
+
+                            <div class="dash-grid">
+                                <div class="module-item">
+                                    <div class="info">
+                                        <span class="emoji">🎯</span>
+                                        <div>
+                                            <div class="name">Aimbot AI</div>
+                                            <div class="desc">neural targeting</div>
+                                        </div>
+                                    </div>
+                                    <button class="toggle" id="aimbotToggle">activate</button>
+                                </div>
+
+                                <div class="module-item">
+                                    <div class="info">
+                                        <span class="emoji">👁️</span>
+                                        <div>
+                                            <div class="name">All ESP</div>
+                                            <div class="desc">full visibility</div>
+                                        </div>
+                                    </div>
+                                    <button class="toggle" id="espToggle">activate</button>
+                                </div>
+
+                                <div class="module-item">
+                                    <div class="info">
+                                        <span class="emoji">🔫</span>
+                                        <div>
+                                            <div class="name">No Recoil</div>
+                                            <div class="desc">zero kick</div>
+                                        </div>
+                                    </div>
+                                    <button class="toggle" id="recoilToggle">activate</button>
+                                </div>
+
+                                <div class="module-item">
+                                    <div class="info">
+                                        <span class="emoji">⚡</span>
+                                        <div>
+                                            <div class="name">Aimbot Drag</div>
+                                            <div class="desc">smooth aim</div>
+                                        </div>
+                                    </div>
+                                    <button class="toggle" id="dragToggle">activate</button>
+                                </div>
+
+                                <div class="row">
+                                    <button class="btn-sm" id="initBtn">⚡ init engine</button>
+                                    <button class="btn-sm" id="resetBtn" style="color:rgba(255,70,70,0.2);">↺ reset</button>
+                                </div>
+
+                                <button class="launch-btn" id="launchBtn">▶ launch game</button>
+
+                                <div class="console-box" id="console">
+                                    <div class="log-line"><span class="timestamp">[${new Date().toLocaleTimeString()}]</span> <span class="highlight">Ultra</span> ready</div>
+                                </div>
+                            </div>
+
+                            <div class="footer" style="margin-top:12px;">
+                                <span>@DilxVXII</span>
+                                <span>•</span>
+                                <span>encrypted</span>
+                                <span>•</span>
+                                <span id="sessionTime">00:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // ---- Timer ----
+            let seconds = 0;
+            setInterval(() => {
+                seconds++;
+                const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const s = String(seconds % 60).padStart(2, '0');
+                document.getElementById('sessionTime').textContent = `${m}:${s}`;
+            }, 1000);
+
+            // ---- Console ----
+            const consoleEl = document.getElementById('console');
+
+            function uiLog(message, type = 'info') {
+                const line = document.createElement('div');
+                line.className = 'log-line';
+                const timestamp = new Date().toLocaleTimeString();
+                const colors = {
+                    success: '<span style="color:#00ffc8;">✓</span>',
+                    error: '<span style="color:#ff6a6a;">✗</span>',
+                    warning: '<span style="color:#f9c74f;">⚠</span>',
+                    info: '<span style="color:#6ac8ff;">⏎</span>'
+                };
+                line.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${colors[type] || ''} ${message}`;
+                consoleEl.appendChild(line);
+                while (consoleEl.children.length > 20) {
+                    consoleEl.removeChild(consoleEl.firstChild);
+                }
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+
+            // ---- Update UI ----
+            function updateUI() {
+                const s = shell.state;
+                document.getElementById('aimbotToggle').classList.toggle('active', s.aimbot);
+                document.getElementById('aimbotToggle').textContent = s.aimbot ? 'deactivate' : 'activate';
+                document.getElementById('espToggle').classList.toggle('active', s.esp);
+                document.getElementById('espToggle').textContent = s.esp ? 'deactivate' : 'activate';
+                document.getElementById('recoilToggle').classList.toggle('active', s.recoil);
+                document.getElementById('recoilToggle').textContent = s.recoil ? 'deactivate' : 'activate';
+                document.getElementById('dragToggle').classList.toggle('active', s.drag);
+                document.getElementById('dragToggle').textContent = s.drag ? 'deactivate' : 'activate';
+                document.getElementById('statusBadge').textContent = s.initialized ? 'active' : 'idle';
+                document.getElementById('statusBadge').className = 'badge' + (s.initialized ? ' active' : '');
+            }
+
+            // ---- Setup Toggles ----
+            async function setupToggle(id, module) {
+                const btn = document.getElementById(id);
+                btn.addEventListener('click', async function() {
+                    const result = await shell.toggle(module);
+                    if (result !== false) {
+                        updateUI();
+                        const names = {
+                            aimbot: 'Aimbot AI',
+                            esp: 'All ESP',
+                            recoil: 'No Recoil',
+                            drag: 'Aimbot Drag'
+                        };
+                        uiLog(`${names[module]} ${result ? 'activated' : 'deactivated'}`, result ? 'success' : 'warning');
+                    }
+                });
+            }
+
+            setupToggle('aimbotToggle', 'aimbot');
+            setupToggle('espToggle', 'esp');
+            setupToggle('recoilToggle', 'recoil');
+            setupToggle('dragToggle', 'drag');
+
+            // ---- Init ----
+            document.getElementById('initBtn').addEventListener('click', async function() {
+                if (shell.state.initialized) {
+                    uiLog('⚠️ Engine already initialized', 'warning');
+                    return;
+                }
+                const result = await shell.init();
+                if (result) {
+                    updateUI();
+                    uiLog('✅ Engine initialized successfully', 'success');
+                }
+            });
+
+            // ---- Reset ----
+            document.getElementById('resetBtn').addEventListener('click', async function() {
+                await shell.reset();
+                updateUI();
+                uiLog('↺ All modules reset', 'warning');
+            });
+
+            // ---- Launch ----
+            document.getElementById('launchBtn').addEventListener('click', async function() {
+                const result = await shell.launch();
+                if (result) {
+                    uiLog('🚀 Game launched successfully', 'success');
+                }
+            });
+
+            // ---- Auto Init ----
+            setTimeout(async () => {
+                await shell.init();
+                updateUI();
+                uiLog('✅ Engine ready', 'success');
+            }, 500);
+        }
+
+        // ============ START ============
+        renderLogin();
+    </script>
+</body>
+</html>
